@@ -449,27 +449,6 @@ class BinaryStream {
         return this;
     }
 
-    /*readString(returnBuffer = false){
-        let buffer = this.read(this.readUnsignedVarInt());
-        return returnBuffer === true ? buffer : buffer.toString();
-    }
-
-    /**
-     * @param v {string}
-     * @return {BinaryStream}
-     *
-    writeString(v){
-        this.writeUnsignedVarInt(v.length);
-
-        if(v.length === 0) return this;
-
-        let buf = Buffer.alloc(v.length);
-        buf.write(v);
-
-        this.append(buf);
-        return this;
-    }*/
-
     /**
      * @return {number}
      */
@@ -624,6 +603,15 @@ class BinaryStream {
                 this.writeShort(port);
                 break;
         }
+        return this;
+    }
+
+    /**
+     * @param v {string}
+     * @return {BinaryStream}
+     */
+    writeString(v){
+        this.append(Buffer.from(v));
         return this;
     }
 
