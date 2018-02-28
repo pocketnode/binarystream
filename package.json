@@ -1,6 +1,6 @@
 {
   "name": "pocketnode-binarystream",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "PocketNode Binary Stream Module",
   "main": "src/BinaryStream.js",
   "keywords": [
