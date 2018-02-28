@@ -1,0 +1,11 @@
+{
+  "name": "pocketnode-binarystream",
+  "version": "0.0.1",
+  "description": "PocketNode Binary Stream Module",
+  "main": "src/BinaryStream.js",
+  "keywords": [
+    "pocketnode",
+    "pocketnode binarystream"
+  ],
+  "author": "eDroid"
+}
