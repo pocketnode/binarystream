@@ -623,7 +623,9 @@ class BinaryStream {
      * @return {BinaryStream}
      */
     writeString(v){
-        this.append(Buffer.alloc(v.length).write(v, "utf8"));
+        let buf = Buffer.alloc(v.length);
+        buf.write(v, 0, v.length, "utf8");
+        this.append(buf);
         return this;
     }
 
