@@ -15,6 +15,12 @@ class BinaryStream {
         }
     }
 
+    /*
+     *******************************
+     * Stream Management Functions *
+     *******************************
+    */
+
     /**
      * Read a set of bytes from the buffer
      * @param len {number}
@@ -40,48 +46,6 @@ class BinaryStream {
     setBuffer(buffer = Buffer.alloc(0), offset = 0){
         this.buffer = buffer;
         this.offset = offset;
-    }
-
-    /**
-     * Get the read/write offset of the stream
-     * @return {number}
-     */
-    getOffset(){
-        return this.offset;
-    }
-
-    /**
-     * Get the stream's buffer
-     * @return {Buffer}
-     */
-    getBuffer(){
-        return this.buffer;
-    }
-
-    /**
-     * Shortcut for <BinaryStream>.buffer.length
-     * @return {number}
-     */
-    get length(){
-        return this.buffer.length;
-    }
-
-    /**
-     * Get the amount of remaining bytes that can be read
-     * @return {number}
-     */
-    getRemainingBytes(){
-        return this.buffer.length - this.offset;
-    }
-
-    /**
-     * Read the remaining amount of bytes
-     * @return {Buffer}
-     */
-    readRemaining(){
-        let buf = this.buffer.slice(this.offset);
-        this.offset = this.buffer.length;
-        return buf;
     }
 
     /**
@@ -113,6 +77,54 @@ class BinaryStream {
             this.offset += buf.length;
         }
         return this;
+    }
+
+    /**
+     * Get the read/write offset of the stream
+     * @return {number}
+     */
+    getOffset(){
+        return this.offset;
+    }
+
+    /**
+     * Get the stream's buffer
+     * @return {Buffer}
+     */
+    getBuffer(){
+        return this.buffer;
+    }
+
+    /**
+     * Shortcut for <BinaryStream>.buffer.length
+     * @return {number}
+     */
+    get length(){
+        return this.buffer.length;
+    }
+
+    /*
+     *******************************
+     * Buffer Management Functions *
+     *******************************
+    */
+
+    /**
+     * Get the amount of remaining bytes that can be read
+     * @return {number}
+     */
+    getRemainingBytes(){
+        return this.buffer.length - this.offset;
+    }
+
+    /**
+     * Read the remaining amount of bytes
+     * @return {Buffer}
+     */
+    readRemaining(){
+        let buf = this.buffer.slice(this.offset);
+        this.offset = this.buffer.length;
+        return buf;
     }
 
     /**
@@ -167,7 +179,7 @@ class BinaryStream {
      */
     writeShort(v){
         let buf = Buffer.alloc(2);
-        buf.writeUInt16BE(v);
+        buf.writeUInt16BE(v, 0);
         this.append(buf);
 
         return this;
@@ -188,7 +200,7 @@ class BinaryStream {
      */
     writeSignedShort(v){
         let buf = Buffer.alloc(2);
-        buf.writeInt16BE(v);
+        buf.writeInt16BE(v, 0);
         this.append(buf);
 
         return this;
@@ -209,7 +221,7 @@ class BinaryStream {
      */
     writeLShort(v){
         let buf = Buffer.alloc(2);
-        buf.writeUInt16LE(v);
+        buf.writeUInt16LE(v, 0);
         this.append(buf);
 
         return this;
@@ -230,7 +242,7 @@ class BinaryStream {
      */
     writeSignedLShort(v){
         let buf = Buffer.alloc(2);
-        buf.writeInt16LE(v);
+        buf.writeInt16LE(v, 0);
         this.append(buf);
 
         return this;
@@ -293,7 +305,7 @@ class BinaryStream {
      */
     writeInt(v){
         let buf = Buffer.alloc(4);
-        buf.writeInt32BE(v);
+        buf.writeInt32BE(v, 0);
         this.append(buf);
 
         return this;
@@ -314,7 +326,7 @@ class BinaryStream {
      */
     writeLInt(v){
         let buf = Buffer.alloc(4);
-        buf.writeInt32LE(v);
+        buf.writeInt32LE(v, 0);
         this.append(buf);
 
         return this;
@@ -341,7 +353,7 @@ class BinaryStream {
      */
     writeFloat(v) {
         let buf = Buffer.alloc(8);
-        let bytes = buf.writeFloatBE(v);
+        let bytes = buf.writeFloatBE(v, 0);
         this.append(buf.slice(0, bytes));
 
         return this;
@@ -368,7 +380,7 @@ class BinaryStream {
      */
     writeLFloat(v){
         let buf = Buffer.alloc(8);
-        let bytes = buf.writeFloatLE(v);
+        let bytes = buf.writeFloatLE(v, 0);
         this.append(buf.slice(0, bytes));
 
         return this;
@@ -387,7 +399,7 @@ class BinaryStream {
      */
     writeDouble(v) {
         let buf = Buffer.alloc(8);
-        buf.writeDoubleBE(v);
+        buf.writeDoubleBE(v, 0);
         this.append(buf);
 
         return this;
@@ -406,7 +418,7 @@ class BinaryStream {
      */
     writeLDouble(v){
         let buf = Buffer.alloc(8);
-        buf.writeDoubleLE(v);
+        buf.writeDoubleLE(v, 0);
         this.append(buf);
 
         return this;
@@ -611,7 +623,7 @@ class BinaryStream {
      * @return {BinaryStream}
      */
     writeString(v){
-        this.append(Buffer.from(v));
+        this.append(Buffer.alloc(v.length).write(v, "utf8"));
         return this;
     }
 
