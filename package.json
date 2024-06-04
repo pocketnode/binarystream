@@ -9,7 +9,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/pocketnode/binarystream.git"
+        "url": "git+https://github.com/pocketnode/binarystream.git"
     },
     "devDependencies": {
         "bun-plugin-dts": "^0.2.3",
