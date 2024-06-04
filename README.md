@@ -33,6 +33,8 @@ In a TypeScript or JavaScript file, import the `BinaryStream` module:
 
 ```typescript
 import { BinaryStream } from "@pocketnode/binarystream";
+// or through CDN
+import { BinaryStream } from "https://unpkg.com/@pocketnode/binarystream@1.1.0/dist/BinaryStream.js";
 ```
 
 ### Creating a BinaryStream Instance
