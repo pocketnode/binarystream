@@ -20,6 +20,7 @@ export default class BinaryStream {
     constructor(buffer: number[] | Uint8Array, offset?: number);
     constructor(buffer: ArrayBuffer, offset?: number);
     constructor(size: number);
+    constructor();
     constructor(
         buffer?: any,
         offset: number = 0
