@@ -30,9 +30,9 @@ bun install @pocketnode/binarystream
 In a TypeScript or JavaScript file, import the `BinaryStream` module:
 
 ```typescript
-import { BinaryStream } from "@pocketnode/binarystream";
+import BinaryStream from "@pocketnode/binarystream";
 // or through CDN
-import { BinaryStream } from "https://unpkg.com/@pocketnode/binarystream@latest/dist/BinaryStream.js";
+import BinaryStream from "https://unpkg.com/@pocketnode/binarystream@latest/dist/BinaryStream.js";
 ```
 
 ### Creating a BinaryStream Instance
@@ -53,7 +53,7 @@ const streamFromBuffer = new BinaryStream(buffer);
 Here is a complete example demonstrating how to write and read data using `BinaryStream`:
 
 ```typescript
-import { BinaryStream } from "@pocketnode/binarystream";
+import BinaryStream from "@pocketnode/binarystream";
 
 // Create a BinaryStream with a new ArrayBuffer of 1024 bytes
 const stream = new BinaryStream(1024);

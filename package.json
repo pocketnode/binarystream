@@ -5,6 +5,17 @@
     "types": "./dist/BinaryStream.d.ts",
     "version": "1.1.1",
     "type": "module",
+    "keywords": [
+        "binary",
+        "stream",
+        "buffer",
+        "data",
+        "read",
+        "write",
+        "endian",
+        "web",
+        "node"
+    ],
     "scripts": {
         "build": "bun run build.ts"
     },
