@@ -1,6 +1,4 @@
-# BinaryStream TypeScript Package
-
-## Overview
+# BinaryStream
 
 `BinaryStream` is a TypeScript package designed to facilitate the reading and writing of binary data. This package leverages the `ArrayBuffer` and `DataView` interfaces, making it compatible with both Node.js and browser environments.
 
