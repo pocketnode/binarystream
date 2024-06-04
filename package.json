@@ -1,11 +1,21 @@
 {
-  "name": "pocketnode-binarystream",
-  "version": "0.0.2",
-  "description": "PocketNode Binary Stream Module",
-  "main": "src/BinaryStream.js",
-  "keywords": [
-    "pocketnode",
-    "pocketnode binarystream"
-  ],
-  "author": "eDroid"
+    "name": "@pocketnode/binarystream",
+    "module": "./dist/BinaryStream.js",
+    "types": "./dist/BinaryStream.d.ts",
+    "version": "1.1.0",
+    "type": "module",
+    "scripts": {
+        "build": "bun run build.ts"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/pocketnode/binarystream.git"
+    },
+    "devDependencies": {
+        "bun-plugin-dts": "^0.2.3",
+        "bun-types": "latest"
+    },
+    "peerDependencies": {
+        "typescript": "^5.0.0"
+    }
 }
