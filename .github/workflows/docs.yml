@@ -1,4 +1,4 @@
-name: Publish to NPM
+name: Publish Docs to GitHub Pages
 
 on:
     release:
@@ -6,6 +6,7 @@ on:
 
 permissions:
     contents: read
+    pages: write
     id-token: write
 
 jobs:
@@ -31,7 +32,20 @@ jobs:
             - name: Build BinaryStream
               run: bun run build
 
-            - name: Publish to NPM
-              run: npm publish --provenance --access public
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+            - name: Build Docs
+              run: bun run docs
+
+            - name: Upload Docs to GitHub Pages
+              uses: actions/upload-pages-artifact@v3
+              with:
+                  path: docs/
+    deploy:
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+        runs-on: ubuntu-latest
+        needs: build
+        steps:
+            - name: Deploy to GitHub Pages
+              id: deployment
+              uses: actions/deploy-pages@v4
