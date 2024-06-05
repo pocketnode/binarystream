@@ -17,7 +17,8 @@
         "node"
     ],
     "scripts": {
-        "build": "bun run build.ts"
+        "build": "bun run build.ts",
+        "docs": "typedoc --plugin typedoc-plugin-mdn-links --plugin typedoc-material-theme --out docs --name BinaryStream --readme README.md --themeColor '#1B1D68' ./dist/BinaryStream.d.ts"
     },
     "license": "GPL-3.0-only",
     "repository": {
@@ -25,10 +26,11 @@
         "url": "git+https://github.com/pocketnode/binarystream.git"
     },
     "devDependencies": {
+        "typescript": "^5.0.0",
         "bun-plugin-dts": "^0.2.3",
-        "bun-types": "latest"
-    },
-    "peerDependencies": {
-        "typescript": "^5.0.0"
+        "bun-types": "latest",
+        "type-doc": "^0.1.41",
+        "typedoc-material-theme": "^1.0.2",
+        "typedoc-plugin-mdn-links": "^3.1.28"
     }
 }

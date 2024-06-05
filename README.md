@@ -1,17 +1,17 @@
 # BinaryStream
 
-`BinaryStream` is a TypeScript package designed to facilitate the reading and writing of binary data. This package leverages the `ArrayBuffer` and `DataView` interfaces, making it compatible with both Node.js and browser environments.
+`BinaryStream` is an Typescript module designed to facilitate the reading and writing of binary data. This package uses the [`ArrayBuffer`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) and [`DataView`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView) interfaces, both of which are native to Javascript making it compatible with Node.js and browser environments.
 
 ## Features
 
 -   Supports both Node.js and browser environments.
 -   Provides an easy-to-use API for handling binary data.
 -   Methods for reading and writing various data types (integers, floats, strings, etc.).
--   Allows for dynamic buffer creation without worrying about resizing.
+-   Allows for dynamic buffer creation without worrying about sizing.
 
 ## Installation
 
-You can install the `BinaryStream` package via npm:
+You can install the `BinaryStream` package via npm.
 
 ```bash
 npm install @pocketnode/binarystream
@@ -27,36 +27,41 @@ bun install @pocketnode/binarystream
 
 ### Importing the Module
 
-In a TypeScript or JavaScript file, import the `BinaryStream` module:
-
 ```typescript
+// Node.js, Bun, etc.
 import BinaryStream from "@pocketnode/binarystream";
-// or through CDN
-import BinaryStream from "https://unpkg.com/@pocketnode/binarystream@latest/dist/BinaryStream.js";
+
+// Browser from CDN
+import BinaryStream from "https://esm.run/@pocketnode/binarystream@latest/dist/BinaryStream.js";
 ```
 
-### Creating a BinaryStream Instance
+### Creating an Instance
 
 To create a new instance of `BinaryStream`, you can either provide an existing `ArrayBuffer` or specify the size of a new buffer:
 
 ```typescript
-// Create a BinaryStream with a new ArrayBuffer of 1024 bytes
-const stream = new BinaryStream(1024);
+// Create an empty BinaryStream
+const stream = new BinaryStream();
+
+// Create a BinaryStream from an array of bytes
+const bytes = BinaryStream.from([0xde, 0xad, 0xbe, 0xef]);
+bytes.toString("hex"); // deadbeef
+
+// Create a BinaryStream from a string
+const str = BinaryStream.from("\xde\xad\xbe\xef", "binary");
+str.toString("hex"); // deadbeef
 
 // Create a BinaryStream from an existing ArrayBuffer
-const buffer = new ArrayBuffer(1024);
-const streamFromBuffer = new BinaryStream(buffer);
+const blob = new Blob(..., {type: "application/octet-stream"});
+const streamFromBuffer = BinaryStream.from(await blob.arrayBuffer());
 ```
 
 ### Example
 
-Here is a complete example demonstrating how to write and read data using `BinaryStream`:
+Here is an example demonstrating how to write and read data using `BinaryStream`:
 
 ```typescript
-import BinaryStream from "@pocketnode/binarystream";
-
-// Create a BinaryStream with a new ArrayBuffer of 1024 bytes
-const stream = new BinaryStream(1024);
+const stream = new BinaryStream();
 
 // Write data to the stream
 stream.writeUInt8(255);
@@ -77,11 +82,8 @@ console.log(uint8); // 255
 console.log(int16); // -32768
 console.log(float32); // 3.14
 console.log(str); // Hello, BinaryStream!
+console.log(stream.buffer); // Uint8Array (31) [255, 128, 0, 64, 72, 245, 195, 0, 0, 0, 20, 72, 101, 108, 108, 111, 44, 32, 66, 105, 110, 97, 114, 121, 83, 116, 114, 101, 97, 109, 33]
 ```
-
-## Compatibility
-
-`BinaryStream` works in both Node.js and browser environments. It relies on `ArrayBuffer` and `DataView`, which are available in [modern browsers](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer/transfer#browser_compatibility) and Node.js.
 
 ## License
 
