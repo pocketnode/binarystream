@@ -6,7 +6,12 @@ on:
 
 permissions:
     contents: read
+    pages: write
     id-token: write
+
+concurrency:
+    group: "pages"
+    cancel-in-progress: false
 
 jobs:
     build:
@@ -42,7 +47,6 @@ jobs:
             - name: Upload Docs to GitHub Pages
               uses: actions/upload-pages-artifact@v3
               with:
-                  artifact-name: docs
                   path: docs/
     deploy:
         environment:
