@@ -119,7 +119,16 @@ class BinaryStream {
      * @param offset The optional offset to write the data at.
      * @returns The updated BinaryStream instance.
      */
-    write(buffer: Uint8Array | number[], offset?: number): this {
+    write(stream: BinaryStream, offset?: number): this;
+    write(buffer: ArrayBuffer, offset?: number): this;
+    write(buffer: Uint8Array | number[], offset?: number): this;
+    write(buffer: any, offset?: number): this {
+        if (buffer instanceof ArrayBuffer) {
+            buffer = new Uint8Array(buffer);
+        } else if (buffer instanceof BinaryStream) {
+            buffer = buffer.buffer;
+        }
+
         const { start, end } = this.increaseOffset(buffer.length, offset);
         if (end > this.length) {
             this.resize(end, false);
@@ -167,6 +176,10 @@ class BinaryStream {
      */
     get length(): number {
         return this.view.buffer.byteLength;
+    }
+
+    get arrayBuffer(): ArrayBuffer {
+        return this.view.buffer;
     }
 
     /**
