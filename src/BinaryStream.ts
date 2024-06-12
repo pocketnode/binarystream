@@ -36,9 +36,10 @@ class BinaryStream {
         }
         if (buffer instanceof ArrayBuffer) {
             this.view = new DataView(buffer);
+        } else if (buffer instanceof Uint8Array) {
+            this.view = new DataView(buffer.buffer);
         } else {
-            this.view = new DataView(new ArrayBuffer(0));
-            this.write(buffer);
+            this.view = new DataView(new Uint8Array(buffer).buffer);
         }
 
         this.offset = offset;
