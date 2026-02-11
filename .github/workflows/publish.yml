@@ -1,37 +1,36 @@
 name: Publish to NPM
 
 on:
-    release:
-        types: [created]
+  release:
+    types: [created]
 
 permissions:
-    contents: read
-    id-token: write
+  contents: read
+  id-token: write   # REQUIRED for npm OIDC
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
+  publish:
+    runs-on: ubuntu-latest
 
-            - name: Setup Bun
-              uses: oven-sh/setup-bun@v1
-              with:
-                  bun-version: latest
+    steps:
+      - uses: actions/checkout@v4
 
-            - name: Setup Node
-              uses: actions/setup-node@v4
-              with:
-                  node-version: "20.x"
-                  registry-url: "https://registry.npmjs.org"
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
 
-            - name: Install Dependencies
-              run: bun install
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
 
-            - name: Build BinaryStream
-              run: bun run build
+      - name: Install dependencies
+        run: bun install
 
-            - name: Publish to NPM
-              run: npm publish --provenance --access public
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Build
+        run: bun run build
+
+      - name: Publish to npm (OIDC)
+        run: npm publish --access public --provenance
