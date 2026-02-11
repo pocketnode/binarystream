@@ -37,7 +37,7 @@ class BinaryStream {
         if (buffer instanceof ArrayBuffer) {
             this.view = new DataView(buffer);
         } else if (buffer instanceof Uint8Array) {
-            this.view = new DataView(buffer.buffer);
+            this.view = new DataView(buffer.buffer as ArrayBuffer);
         } else {
             this.view = new DataView(new Uint8Array(buffer).buffer);
         }
@@ -50,7 +50,7 @@ class BinaryStream {
      * @returns The DataView object.
      */
     getDataView(): DataView {
-        return this.view;
+        return this.view as DataView;
     }
 
     /**
@@ -60,8 +60,8 @@ class BinaryStream {
      * @returns The updated BinaryStream instance.
      */
     resize(size: number, canShrink: boolean = true): this {
-        if (canShrink || (!canShrink && size > this.view.buffer.byteLength)) {
-            this.view = new DataView(this.view.buffer.transfer(size));
+        if (canShrink || (!canShrink && size > this.length)) {
+            this.view = new DataView(this.arrayBuffer.transfer(size));
         }
         return this;
     }
@@ -111,7 +111,7 @@ class BinaryStream {
             throw new RangeError(`Buffer overrun, cannot read past the end of the buffer. Start: ${start}, End: ${end}, Length: ${this.length}`);
         }
 
-        return new Uint8Array(this.view.buffer.slice(start, end));
+        return new Uint8Array(this.arrayBuffer.slice(start, end));
     }
 
     /**
@@ -168,7 +168,7 @@ class BinaryStream {
      * @returns A copy of the ArrayBuffer.
      */
     get buffer(): Uint8Array {
-        return new Uint8Array(this.view.buffer);
+        return new Uint8Array(this.arrayBuffer);
     }
 
     /**
@@ -180,7 +180,7 @@ class BinaryStream {
     }
 
     get arrayBuffer(): ArrayBuffer {
-        return this.view.buffer;
+        return this.view.buffer as ArrayBuffer;
     }
 
     /**
@@ -189,7 +189,7 @@ class BinaryStream {
      * @returns The created Blob object.
      */
     blob(type: string = "application/octet-stream"): Blob {
-        return new Blob([this.view.buffer], { type });
+        return new Blob([this.arrayBuffer], { type });
     }
 
     /**
@@ -199,6 +199,8 @@ class BinaryStream {
     getRemainingBytes(): number {
         return this.length - this.offset;
     }
+    /** @inheritdoc BinaryStream.getRemainingBytes */
+    rest = this.getRemainingBytes;
 
     /**
      * Reads the remaining amount of bytes.
@@ -207,6 +209,8 @@ class BinaryStream {
     readRemainingBytes(): Uint8Array {
         return this.read(this.getRemainingBytes());
     }
+    /** @inheritdoc BinaryStream.readRemainingBytes */
+    readRest = this.readRemainingBytes;
 
     /**
      * Reads a boolean value.
@@ -818,15 +822,19 @@ class BinaryStream {
      * @param offset - The optional offset at which to write the value.
      * @returns The updated BinaryStream instance.
      */
-    writeUVarInt(v: number, offset: number = this.offset): this {
-        for (let i = 0; i < 5; i++) {
-            if ((v >> 7) !== 0) {
-                this.writeByte(v | 0x80, offset++);
-            } else {
-                this.writeByte(v & 0x7f, offset++);
+    writeUVarInt(v: number, offset: number = -1): this {
+        if(offset >= 0){
+            this.offset = offset;
+        }
+        
+        while (true) {
+            if ((v & ~0x7f) == 0) {
+                this.writeByte(v);
                 break;
             }
-            v >>= 7;
+
+            this.writeByte((v & 0x7f) | 0x80);
+            v >>>= 7;
         }
 
         return this;
@@ -997,7 +1005,7 @@ class BinaryStream {
 
             default:
                 if (encoding === "binary") encoding = "latin1";
-                return new TextDecoder(encoding).decode(this.view.buffer);
+                return new TextDecoder(encoding).decode(this.arrayBuffer);
         }
 
     }
@@ -1010,7 +1018,7 @@ class BinaryStream {
     split(bytes: number): Uint8Array[] {
         let buffers: ArrayBuffer[] = [];
         for (let i = 0; i < this.length; i += bytes) {
-            buffers.push(this.view.buffer.slice(i, bytes));
+            buffers.push(this.arrayBuffer.slice(i, i + bytes));
         }
         return buffers.map(buffer => new Uint8Array(buffer));
     }
@@ -1049,22 +1057,6 @@ class BinaryStream {
             default:
                 throw new Error(`Unsupported encoding: ${encoding}`);
         }
-    }
-
-    /**
-     * Writes a string to the buffer
-     */
-    writeString(str: string, offset?: number): this {
-        let buffer = new TextEncoder().encode(str);
-        return this.writeUInt32BE(buffer.length, offset).write(buffer);
-    }
-
-    /**
-     * Reads a string from the buffer
-     */
-    readString(offset?: number): string {
-        let length = this.readUInt32BE(offset);
-        return new TextDecoder().decode(this.read(length));
     }
 }
 

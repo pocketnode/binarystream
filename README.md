@@ -67,7 +67,7 @@ const stream = new BinaryStream();
 stream.writeUInt8(255);
 stream.writeInt16(-32768);
 stream.writeFloat32(3.14);
-stream.writeString("Hello, BinaryStream!");
+stream.write(new TextEncoder().encode("Hello, BinaryStream!"));
 
 // Reset the position to the beginning of the stream for reading
 stream.flip();
@@ -76,12 +76,12 @@ stream.flip();
 const uint8 = stream.readUInt8();
 const int16 = stream.readInt16();
 const float32 = stream.readFloat32();
-const str = stream.readString();
+const str = stream.readRest();
 
 console.log(uint8); // 255
 console.log(int16); // -32768
 console.log(float32); // 3.14
-console.log(str); // Hello, BinaryStream!
+console.log(new TextDecoder().decode(str)); // Hello, BinaryStream!
 console.log(stream.buffer); // Uint8Array (31) [255, 128, 0, 64, 72, 245, 195, 0, 0, 0, 20, 72, 101, 108, 108, 111, 44, 32, 66, 105, 110, 97, 114, 121, 83, 116, 114, 101, 97, 109, 33]
 ```
 

@@ -26,11 +26,12 @@
         "url": "git+https://github.com/pocketnode/binarystream.git"
     },
     "devDependencies": {
-        "typescript": "^5.0.0",
-        "bun-plugin-dts": "^0.2.3",
-        "bun-types": "latest",
+        "typescript": "^5.9.3",
+        "bun-plugin-dts": "^0.2.4",
+        "@types/bun": "latest",
+        "@types/node": "latest",
         "type-doc": "^0.1.41",
-        "typedoc-material-theme": "^1.0.2",
-        "typedoc-plugin-mdn-links": "^3.1.28"
+        "typedoc-material-theme": "^1.4.1",
+        "typedoc-plugin-mdn-links": "^3.3.8"
     }
 }
